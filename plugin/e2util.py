@@ -21,14 +21,13 @@ from Tools.Directories import resolveFilename, SCOPE_CONFIG
 from enigma import iPlayableService, eTimer, getDesktop
 from skin import parseColor
 
-from compat import eConnectCallback
-from settings import SERVICE_EPLAYER3, SERVICE_EXTEPLAYER3, SERVICE_GSTPLAYER, SERVICEMP3
+from .settings import SERVICE_EXTEPLAYER3, SERVICE_GSTPLAYER, SERVICEMP3
 
 
 # InfoBarCueSheetSupport from OpenPli with removed getLastPosition and
 # with delayed __serviceStarted, in case serviceReference is not yet set (BH image)
 # changed on_movie_start config
- 
+
 class InfoBarCueSheetSupport:
     CUT_TYPE_IN = 0
     CUT_TYPE_OUT = 1
@@ -45,12 +44,11 @@ class InfoBarCueSheetSupport:
                 "toggleMark": (self.toggleMark, _("Toggle a cut mark at the current position"))
             }, prio=1)
 
-        self.cut_list = [ ]
+        self.cut_list = []
         self.is_closing = False
         self.timer = eTimer()
-        self.timer_conn = eConnectCallback(self.timer.timeout, self.__isServiceStarted)
-        self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-            {
+        self.timer.callback.append(self.__isServiceStarted)
+        self.__event_tracker = ServiceEventTracker(screen=self, eventmap={
                 iPlayableService.evStart: self.__serviceStarted,
                 iPlayableService.evEnd: self.__serviceStopped,
                 iPlayableService.evCuesheetChanged: self.downloadCuesheet,
@@ -70,10 +68,10 @@ class InfoBarCueSheetSupport:
             self.timer.stop()
             self.__servicePlaying()
         else:
-            print 'service not yet started...'
-        
+            print('service not yet started...')
+
     def __servicePlaying(self):
-        print "new service started! trying to download cuts!"
+        print("new service started! trying to download cuts!")
         self.downloadCuesheet()
 
         if self.ENABLE_RESUME_SUPPORT:
@@ -89,9 +87,9 @@ class InfoBarCueSheetSupport:
             if seekable is None:
                 return  # Should not happen?
             length = seekable.getLength() or (None, 0)
-            print "seekable.getLength() returns:", length
+            print("seekable.getLength() returns:", length)
             # Hmm, this implies we don't resume if the length is unknown...
-            if (last > 900000) and (not length[1]  or (last < length[1] - 900000)):
+            if (last > 900000) and (not length[1] or (last < length[1] - 900000)):
                 self.resume_point = last
                 l = last / 90000
                 on_movie_start = config.plugins.mediaplayer2.onMovieStart.value
@@ -129,7 +127,7 @@ class InfoBarCueSheetSupport:
         r = seek.getPlayPosition()
         if r[0]:
             return None
-        return long(r[1])
+        return int(r[1])
 
     def cueGetEndCutPosition(self):
         ret = False
@@ -159,7 +157,7 @@ class InfoBarCueSheetSupport:
     def jumpPreviousMark(self):
         # we add 5 seconds, so if the play position is <5s after
         # the mark, the mark before will be used
-        self.jumpPreviousNextMark(lambda x:-x - 5 * 90000, start=True)
+        self.jumpPreviousNextMark(lambda x: -x - 5 * 90000, start=True)
 
     def jumpNextMark(self):
         if not self.jumpPreviousNextMark(lambda x: x - 90000):
@@ -200,7 +198,7 @@ class InfoBarCueSheetSupport:
     def toggleMark(self, onlyremove=False, onlyadd=False, tolerance=5 * 90000, onlyreturn=False):
         current_pos = self.cueGetCurrentPosition()
         if current_pos is None:
-            print "not seekable"
+            print("not seekable")
             return
 
         nearest_cutpoint = self.getNearestCutPoint(current_pos)
@@ -240,7 +238,7 @@ class InfoBarCueSheetSupport:
         cue = self.__getCuesheet()
 
         if cue is None:
-            print "upload failed, no cuesheet interface"
+            print("upload failed, no cuesheet interface")
             return
         cue.setCutList(self.cut_list)
 
@@ -248,14 +246,13 @@ class InfoBarCueSheetSupport:
         cue = self.__getCuesheet()
 
         if cue is None:
-            print "download failed, no cuesheet interface"
-            self.cut_list = [ ]
+            print("download failed, no cuesheet interface")
+            self.cut_list = []
         else:
             self.cut_list = cue.getCutList()
-            
+
     def __onClose(self):
         self.timer.stop()
-        del self.timer_conn
         del self.timer
 
 
@@ -280,20 +277,20 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
     def saveLastPosition(self):
         service = self.session.nav.getCurrentService()
         if service is None:
-            print '[InfoBarCueSheet] saveLastPosition - cannot save service is None!'
+            print('[InfoBarCueSheet] saveLastPosition - cannot save service is None!')
             return
         seekable = service and service.seek()
         length = seekable and seekable.getLength()
-        length = length[0] and None or long(length[1])
+        length = length[0] and None or int(length[1])
         if length is None:
-            print '[InfoBarCueSheet] saveLastPosition - cannot save length is None!'
+            print('[InfoBarCueSheet] saveLastPosition - cannot save length is None!')
             return
         position = self.cueGetCurrentPosition()
         if position is None:
-            print '[InfoBarCueSheet] saveLastPosition - cannot save position is None!'
+            print('[InfoBarCueSheet] saveLastPosition - cannot save position is None!')
             return
         if not (length - position > 60 * 90 * 1000):
-            print "[InfoBarCueSheet] saveLastPosition - not saving position, its within end limit"
+            print("[InfoBarCueSheet] saveLastPosition - not saving position, its within end limit")
             self.removeLastPosition()
             return
         # cleanup LAST marks
@@ -301,7 +298,7 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
             if mark[1] == InfoBarCueSheetSupport.CUT_TYPE_LAST:
                 self.cut_list.remove(mark)
         l = position / 90000
-        print "[InfoBarCueSheet] saveLastPosition - saving position %d:%02d:%02d" % ((l / 3600, l % 3600 / 60, l % 60))
+        print("[InfoBarCueSheet] saveLastPosition - saving position %d:%02d:%02d" % ((l / 3600, l % 3600 / 60, l % 60)))
         self.addMark((position, InfoBarCueSheetSupport.CUT_TYPE_LAST))
 
     def removeLastPosition(self):
@@ -316,10 +313,10 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
                     self.cut_list.remove(mark)
 
         if last_mark is None:
-            print "[InfoBarCueSheet] removeLastPosition - nothing to remove"
+            print("[InfoBarCueSheet] removeLastPosition - nothing to remove")
             return
         l = last_mark[0] / 90000
-        print "[InfoBarCueSheet] removeLastPosition - %d:%02d:%02d" % ((l / 3600, l % 3600 / 60, l % 60))
+        print("[InfoBarCueSheet] removeLastPosition - %d:%02d:%02d" % ((l / 3600, l % 3600 / 60, l % 60)))
         self.removeMark(last_mark)
 
     def getGaugeRenderer(self, rendererList):
@@ -330,26 +327,26 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
                 i += 1
                 positionGauge = r
         if i == 0:
-            print "[InfoBarCueSheetSupport] no PositionGuage render found"
+            print("[InfoBarCueSheetSupport] no PositionGuage render found")
         elif i > 2:
-            print "[InfoBarCueSheetSupport] more PositionGuage renderers found"
+            print("[InfoBarCueSheetSupport] more PositionGuage renderers found")
             return None
         elif i == 1:
-            print "[InfoBarCueSheetSupport] found PositionGuage renderer"
+            print("[InfoBarCueSheetSupport] found PositionGuage renderer")
         return positionGauge
 
     def updateGaugeRenderers(self):
         for r in self.__gaugeRenderers:
-            r.setCutlist(map(lambda x:(long(x[0]), int(x[1])), (cut for cut in self.cut_list)))
+            r.setCutlist(map(lambda x: (int(x[0]), int(x[1])), (cut for cut in self.cut_list)))
 
     def downloadCuesheet(self):
         if self.cueSheetForServicemp3:
             sref = self.session.nav.getCurrentlyPlayingServiceReference()
             if sref is None:
-                print '[InfobarCueSheetSupport] downloadCuesheet - serviceReference is None!'
+                print('[InfobarCueSheetSupport] downloadCuesheet - serviceReference is None!')
                 return
-            print '[InfobarCueSheetSupport] downloadCuesheet - serviceReference type : %d' % sref.type
-            if sref.type in (SERVICE_GSTPLAYER, SERVICE_EPLAYER3, SERVICE_EXTEPLAYER3, SERVICEMP3):
+            print('[InfobarCueSheetSupport] downloadCuesheet - serviceReference type : %d' % sref.type)
+            if sref.type in (SERVICE_GSTPLAYER, SERVICE_EXTEPLAYER3, SERVICEMP3):
                 try:
                     self.cut_list = self.__cutList.getCutList(sref.getPath())
                 except Exception:
@@ -367,7 +364,7 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
         if self.cueSheetForServicemp3:
             sref = self.session.nav.getCurrentlyPlayingServiceReference()
             sref_type = sref and sref.type
-            if sref_type and sref_type in (SERVICE_GSTPLAYER, SERVICE_EPLAYER3, SERVICE_EXTEPLAYER3, SERVICEMP3):
+            if sref_type and sref_type in (SERVICE_GSTPLAYER, SERVICE_EXTEPLAYER3, SERVICEMP3):
                 try:
                     self.__cutList.setCutList(sref.getPath(), self.cut_list)
                 except Exception:
@@ -380,8 +377,8 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
                 InfoBarCueSheetSupport.uploadCuesheet(self)
         else:
             InfoBarCueSheetSupport.uploadCuesheet(self)
-        
-        
+
+
 class StatusScreen(Screen):
 
     def __init__(self, session):
@@ -393,7 +390,7 @@ class StatusScreen(Screen):
         statusPositionX = 50
         statusPositionY = 100
         self.delayTimer = eTimer()
-        self.delayTimer_conn = eConnectCallback(self.delayTimer.timeout, self.hideStatus)
+        self.delayTimer.callback.append(self.hideStatus)
         self.delayTimerDelay = 1500
 
         self.skin = """
@@ -403,7 +400,7 @@ class StatusScreen(Screen):
 
         Screen.__init__(self, session)
         self.stand_alone = True
-        print 'initializing status display'
+        print('initializing status display')
         self["status"] = Label("")
         self.onClose.append(self.__onClose)
 
@@ -419,8 +416,8 @@ class StatusScreen(Screen):
 
     def __onClose(self):
         self.delayTimer.stop()
-        del self.delayTimer_conn
         del self.delayTimer
+
 
 class CutList(object):
     def __init__(self, filename):
@@ -434,19 +431,17 @@ class CutList(object):
 
     def getCutList(self, path):
         if not self.sqlite3:
-            print '[CutList] python-sqlite3 not installed'
+            print('[CutList] python-sqlite3 not installed')
             return []
-        cutList = self.cueSheetDAO.get_cut_list(unicode(path, 'utf-8'))
+        cutList = self.cueSheetDAO.get_cut_list(path)
         if cutList is not None:
-            return map(lambda x:(long(x[0] * 90000), int(x[1])), (x for x in cutList))
+            return [(int(x[0] * 90000), int(x[1])) for x in (x for x in cutList)]
 
     def setCutList(self, path, cutList):
         if not self.sqlite3:
-            print '[CutList] python-sqlite3 not installed'
+            print('[CutList] python-sqlite3 not installed')
             return
-        self.cueSheetDAO.set_cut_list(unicode(path, 'utf-8'), map(lambda x:(int(x[0] / 90000), int(x[1])), (x for x in cutList)))
-
-
+        self.cueSheetDAO.set_cut_list(str(path, 'utf-8'), [(int(x[0] / 90000), int(x[1])) for x in (x for x in cutList)])
 
 
 # audioSelection with removed subtitles support
@@ -463,6 +458,7 @@ class MyAudioSelection(AudioSelection):
     def getSubtitleList(self):
         return []
 
+
 class MyInfoBarAudioSelection(InfoBarAudioSelection):
 
     def audioSelection(self):
@@ -474,46 +470,44 @@ class InfoBarAspectChange:
     Simple aspect ratio changer
     """
 
-    V_DICT = {'16_9_letterbox':{'aspect':'16:9', 'policy2':'letterbox', 'title':'16:9 ' + _("Letterbox")},
-                         '16_9_panscan':{'aspect':'16:9', 'policy2':'panscan', 'title':'16:9 ' + _("Pan&scan")},
-                         '16_9_nonlinear':{'aspect':'16:9', 'policy2':'panscan', 'title':'16:9 ' + _("Nonlinear")},
-                         '16_9_bestfit':{'aspect':'16:9', 'policy2':'bestfit', 'title':'16:9 ' + _("Just scale")},
-                         '16_9_4_3_pillarbox':{'aspect':'16:9', 'policy':'pillarbox', 'title':'4:3 ' + _("PillarBox")},
-                         '16_9_4_3_panscan':{'aspect':'16:9', 'policy':'panscan', 'title':'4:3 ' + _("Pan&scan")},
-                         '16_9_4_3_nonlinear':{'aspect':'16:9', 'policy':'nonlinear', 'title':'4:3 ' + _("Nonlinear")},
-                         '16_9_4_3_bestfit':{'aspect':'16:9', 'policy':'bestfit', 'title':_("Just scale")},
-                         '4_3_letterbox':{'aspect':'4:3', 'policy':'letterbox', 'policy2':'policy', 'title':_("Letterbox")},
-                         '4_3_panscan':{'aspect':'4:3', 'policy':'panscan', 'policy2':'policy', 'title':_("Pan&scan")},
-                         '4_3_bestfit':{'aspect':'4:3', 'policy':'bestfit', 'policy2':'policy', 'title':_("Just scale")}}
+    V_DICT = {'16_9_letterbox': {'aspect': '16:9', 'policy2': 'letterbox', 'title': '16:9 ' + _("Letterbox")},
+                         '16_9_panscan': {'aspect': '16:9', 'policy2': 'panscan', 'title': '16:9 ' + _("Pan&scan")},
+                         '16_9_nonlinear': {'aspect': '16:9', 'policy2': 'panscan', 'title': '16:9 ' + _("Nonlinear")},
+                         '16_9_bestfit': {'aspect': '16:9', 'policy2': 'bestfit', 'title': '16:9 ' + _("Just scale")},
+                         '16_9_4_3_pillarbox': {'aspect': '16:9', 'policy': 'pillarbox', 'title': '4:3 ' + _("PillarBox")},
+                         '16_9_4_3_panscan': {'aspect': '16:9', 'policy': 'panscan', 'title': '4:3 ' + _("Pan&scan")},
+                         '16_9_4_3_nonlinear': {'aspect': '16:9', 'policy': 'nonlinear', 'title': '4:3 ' + _("Nonlinear")},
+                         '16_9_4_3_bestfit': {'aspect': '16:9', 'policy': 'bestfit', 'title': _("Just scale")},
+                         '4_3_letterbox': {'aspect': '4:3', 'policy': 'letterbox', 'policy2': 'policy', 'title': _("Letterbox")},
+                         '4_3_panscan': {'aspect': '4:3', 'policy': 'panscan', 'policy2': 'policy', 'title': _("Pan&scan")},
+                         '4_3_bestfit': {'aspect': '4:3', 'policy': 'bestfit', 'policy2': 'policy', 'title': _("Just scale")}}
 
     V_MODES = ['16_9_letterbox', '16_9_panscan', '16_9_nonlinear', '16_9_bestfit',
                                 '16_9_4_3_pillarbox', '16_9_4_3_panscan', '16_9_4_3_nonlinear', '16_9_4_3_bestfit',
                                 '4_3_letterbox', '4_3_panscan', '4_3_bestfit']
 
-
     def __init__(self):
         self.aspectChanged = False
         try:
             self.defaultAspect = open("/proc/stb/video/aspect", "r").read().strip()
-        except IOError:
+        except OSError:
             self.defaultAspect = None
         try:
             self.defaultPolicy = open("/proc/stb/video/policy", "r").read().strip()
-        except IOError:
+        except OSError:
             self.defaultPolicy = None
         try:
             self.defaultPolicy2 = open("/proc/stb/video/policy2", "r").read().strip()
-        except IOError:
+        except OSError:
             self.defaultPolicy2 = None
         self.currentAVMode = self.V_MODES[0]
 
         self["aspectChangeActions"] = HelpableActionMap(self, "InfobarAspectChangeActions",
             {
-             "aspectChange":(self.aspectChange, _("change aspect ratio"))
+             "aspectChange": (self.aspectChange, _("change aspect ratio"))
               }, -3)
 
         self.onClose.append(self.__onClose)
-
 
     def getAspectStr(self):
         mode = self.V_DICT[self.currentAVMode]
@@ -521,25 +515,23 @@ class InfoBarAspectChange:
         policyStr = mode['title']
         return "%s: %s\n%s: %s" % (_("Aspect"), aspectStr, _("Policy"), policyStr)
 
-
     def setAspect(self, aspect, policy, policy2):
-        print 'aspect: %s policy: %s policy2: %s' % (str(aspect), str(policy), str(policy2))
+        print('aspect: %s policy: %s policy2: %s' % (str(aspect), str(policy), str(policy2)))
         if aspect:
             try:
                 open("/proc/stb/video/aspect", "w").write(aspect)
-            except IOError as e:
-                print e
+            except OSError as e:
+                print(e)
         if policy:
             try:
                 open("/proc/stb/video/policy", "w").write(policy)
-            except IOError as e:
-                print e
+            except OSError as e:
+                print(e)
         if policy2:
             try:
                 open("/proc/stb/video/policy2", "w").write(policy2)
-            except IOError as e:
-                print e
-
+            except OSError as e:
+                print(e)
 
     def toggleAVMode(self):
         self.aspectChanged = True

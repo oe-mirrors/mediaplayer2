@@ -27,40 +27,28 @@ config.plugins.mediaplayer2.extensionsMenu = ConfigYesNo(default=False)
 config.plugins.mediaplayer2.mainMenu = ConfigYesNo(default=False)
 config.plugins.mediaplayer2.cueSheetForServicemp3 = ConfigOnOff(default=True)
 config.plugins.mediaplayer2.saveLastPosition = ConfigYesNo(default=True)
-config.plugins.mediaplayer2.onMovieStart = ConfigSelection(default = "resume", choices = [
+config.plugins.mediaplayer2.onMovieStart = ConfigSelection(default="resume", choices=[
         ("ask yes", _("Ask user") + " " + _("default") + " " + _("yes")),
         ("ask no", _("Ask user") + " " + _("default") + " " + _("no")),
         ("resume", _("Resume from last position")),
         ("beginning", _("Start from the beginning"))])
 
-SERVICEMP3          = 4097
-SERVICE_EPLAYER3    = 4099
-SERVICE_GSTPLAYER   = 5001
+SERVICEMP3 = 4097
+SERVICE_GSTPLAYER = 5001
 SERVICE_EXTEPLAYER3 = 5002
 
-LIBMEDIA_CHOICES = {SERVICEMP3:_('Gstreamer')}
+LIBMEDIA_CHOICES = {SERVICEMP3: _('Gstreamer')}
 
-config.plugins.mediaplayer2.useLibMedia = ConfigYesNo(default = False)
-fname = "/proc/%d/maps" % os.getpid()
+config.plugins.mediaplayer2.useLibMedia = ConfigYesNo(default=False)
 libMediaTest = False
 
-with open(fname) as f:
-    for line in f:
-        if 'libeplayer3' in line:
-            libMediaTest = True
-            LIBMEDIA_CHOICES[SERVICE_EPLAYER3] = _('Eplayer3')
-            break
 
 serviceapp_available = False
 try:
-    from Plugins.Extensions.ServiceApp import serviceapp_client
+    from Plugins.SystemPlugins.ServiceApp import serviceapp_client
     serviceapp_available = True
 except ImportError:
-    try:
-        from Plugins.SystemPlugins.ServiceApp import serviceapp_client
-        serviceapp_available = True
-    except ImportError:
-        pass
+    pass
 
 if serviceapp_available:
     if serviceapp_client.isGstPlayerAvailable():
@@ -68,7 +56,7 @@ if serviceapp_available:
         LIBMEDIA_CHOICES[SERVICE_GSTPLAYER] = _('Gstreamer(App)')
     if serviceapp_client.isExtEplayer3Available():
         libMediaTest = True
-        LIBMEDIA_CHOICES[SERVICE_EXTEPLAYER3] =  _('ExtEplayer3(App)')
+        LIBMEDIA_CHOICES[SERVICE_EXTEPLAYER3] = _('ExtEplayer3(App)')
 
 sinkChoices = []
 if (os.path.isfile(eEnv.resolve("$libdir/gstreamer-1.0/libgstdvbvideosink.so")) and
@@ -79,7 +67,7 @@ if (os.path.isfile(eEnv.resolve("$libdir/gstreamer-1.0/libgstdvbvideosinkexp.so"
 	sinkChoices.append("experimental")
 
 config.plugins.mediaplayer2.serviceGstPlayer = ConfigSubsection()
-config.plugins.mediaplayer2.serviceGstPlayer.sink = ConfigSelection(default = 'original', choices=sinkChoices)
+config.plugins.mediaplayer2.serviceGstPlayer.sink = ConfigSelection(default='original', choices=sinkChoices)
 config.plugins.mediaplayer2.serviceGstPlayer.subtitles = ConfigYesNo(default=True)
 config.plugins.mediaplayer2.serviceGstPlayer.bufferSize = ConfigInteger(8192, (1024, 1024 * 64))
 config.plugins.mediaplayer2.serviceGstPlayer.bufferDuration = ConfigInteger(0, (0, 100))
@@ -93,7 +81,7 @@ else:
         config.plugins.mediaplayer2.useLibMedia.value = False
         config.plugins.mediaplayer2.useLibMedia.save()
 
-config.plugins.mediaplayer2.libMedia = ConfigSelection(default=str(SERVICEMP3), choices=[(str(k), v) for k,v in LIBMEDIA_CHOICES.items()])
+config.plugins.mediaplayer2.libMedia = ConfigSelection(default=str(SERVICEMP3), choices=[(str(k), v) for k, v in LIBMEDIA_CHOICES.items()])
 config.plugins.mediaplayer2.lcdOnVideoPlayback = ConfigSelection(default='default', choices=[
         ('default', _("Default")),
         ('remaining', _("shows remaining time")),
@@ -101,7 +89,7 @@ config.plugins.mediaplayer2.lcdOnVideoPlayback = ConfigSelection(default='defaul
 config.plugins.mediaplayer2.contextMenuType = ConfigSelection(default='intermediate', choices=[
         ("simple", _("Simple")),
         ("intermediate", _("Intermediate")),
-        ("expert", _("Expert")) ])
+        ("expert", _("Expert"))])
 
 
 try:
@@ -122,12 +110,13 @@ def ServiceGstPlayerApplySettings():
     serviceapp_client.setGstreamerPlayerSettings(serviceapp_client.OPTIONS_USER, videoSink, audioSink, subtitleEnabled, bufferSize, bufferDuration)
     serviceapp_client.setUseUserSettings()
 
+
 class DirectoryBrowser(Screen, HelpableScreen):
 
     def __init__(self, session, currDir):
         Screen.__init__(self, session)
         # for the skin: first try MediaPlayerDirectoryBrowser, then FileBrowser, this allows individual skinning
-        self.skinName = ["MediaPlayerDirectoryBrowser", "FileBrowser" ]
+        self.skinName = ["MediaPlayerDirectoryBrowser", "FileBrowser"]
 
         HelpableScreen.__init__(self)
 
@@ -164,19 +153,20 @@ class DirectoryBrowser(Screen, HelpableScreen):
     def exit(self):
         self.close(False)
 
-class MediaPlayerSettings(Screen,ConfigListScreen):
+
+class MediaPlayerSettings(Screen, ConfigListScreen):
 
     def __init__(self, session, parent):
         Screen.__init__(self, session)
         # for the skin: first try MediaPlayerSettings, then Setup, this allows individual skinning
-        self.skinName = ["MediaPlayerSettings", "Setup" ]
+        self.skinName = ["MediaPlayerSettings", "Setup"]
         self.setup_title = _("Edit settings")
-        self.onChangedEntry = [ ]
+        self.onChangedEntry = []
 
         self["key_red"] = StaticText(_("Cancel"))
         self["key_green"] = StaticText(_("Save"))
 
-        ConfigListScreen.__init__(self, [], session = session, on_change = self.changedEntry)
+        ConfigListScreen.__init__(self, [], session=session, on_change=self.changedEntry)
         self.parent = parent
         self.removeAllPositionsCfg = ConfigNothing()
         self.initConfigList()
@@ -228,7 +218,7 @@ class MediaPlayerSettings(Screen,ConfigListScreen):
                     self.list.append(getConfigListEntry(_("subtitles"), config.plugins.mediaplayer2.serviceGstPlayer.subtitles))
             self["config"].setList(self.list)
         except KeyError:
-            print "keyError"
+            print("keyError")
 
     def changedConfigList(self):
         self.initConfigList()
@@ -256,10 +246,10 @@ class MediaPlayerSettings(Screen,ConfigListScreen):
             try:
                 CueSheetDAO.instance.clean_db()
             except Exception as e:
-                print str(e)
+                print(str(e))
 
     def DirectoryBrowserClosed(self, path):
-        print "PathBrowserClosed:" + str(path)
+        print("PathBrowserClosed:" + str(path))
         if path != False:
             config.plugins.mediaplayer2.defaultDir.setValue(path)
 

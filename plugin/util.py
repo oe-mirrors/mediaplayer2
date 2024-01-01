@@ -4,19 +4,20 @@ import sqlite3
 
 DB_VERSION = 1
 
+
 class CueSheetDAO(object):
     instance = None
 
     def __init__(self, db_path):
         CueSheetDAO.instance = self
-        self.db_path = "%s_v%d.db"%(os.path.splitext(db_path)[0],DB_VERSION)
+        self.db_path = "%s_v%d.db" % (os.path.splitext(db_path)[0], DB_VERSION)
         db_is_new = not os.path.exists(self.db_path)
-        print '[CueSheetDAO] init', self.db_path
+        print('[CueSheetDAO] init', self.db_path)
         if db_is_new:
-            print '[CueSheetDAO] creating schema'
+            print('[CueSheetDAO] creating schema')
             self.create_schema()
         else:
-            print '[CueSheetDAO] database exists, assume schema does, too.'
+            print('[CueSheetDAO] database exists, assume schema does, too.')
 
     def create_schema(self):
         with sqlite3.connect(self.db_path) as conn:
@@ -40,14 +41,14 @@ class CueSheetDAO(object):
         try:
             os.remove(self.db_path)
         except OSError as e:
-            print '[CueSheetDAO] error when cleaning db', str(e)
+            print('[CueSheetDAO] error when cleaning db', str(e))
             return False
         else:
             self.create_schema()
             return True
 
     def get_cut_list(self, path):
-        print '[CueSheetDAO] getCutList for %s' % path.encode('utf-8')
+        print('[CueSheetDAO] getCutList for %s' % path)
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = sqlite3.Row
             cutlist = []
@@ -63,11 +64,11 @@ class CueSheetDAO(object):
             for row in cursor.fetchall():
                 cutlist.append((row['time'], row['type']))
             if len(cutlist) > 0:
-                print '[CueSheetDAO] getCutList - succesfull'
+                print('[CueSheetDAO] getCutList - succesfull')
             return cutlist
 
     def set_cut_list(self, path, cutlist):
-        print '[CueSheetDAO] setCutList for %s' % path.encode('utf-8')
+        print('[CueSheetDAO] setCutList for %s' % path)
         with sqlite3.connect(self.db_path) as conn:
             try:
                 cursor = conn.cursor()
@@ -84,5 +85,5 @@ class CueSheetDAO(object):
                 traceback.print_exc()
                 conn.rollback()
             else:
-                print '[CueSheetDAO] setCutList for %s was succesfull' % path.encode('utf-8')
+                print('[CueSheetDAO] setCutList for %s was succesfull' % path)
                 conn.commit()
