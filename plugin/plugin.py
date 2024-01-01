@@ -4,7 +4,7 @@ from time import strftime
 import traceback
 
 from Components.ActionMap import ActionMap, HelpableActionMap
-from Components.FileList import FileList
+from Components.FileList import FileList, FILE_NAME, FILE_IS_DIR
 from Components.Harddisk import harddiskmanager
 from Components.Label import Label
 from Components.MediaPlayer import PlayList, STATE_STOP, STATE_NONE
@@ -157,12 +157,12 @@ class MediaPlayer(Screen, InfoBarBase, SubsSupportStatus, SubsSupport, InfoBarSe
         self.addPlaylistParser(PlaylistIOInternal, "e2pls")
 
         # 'None' is magic to start at the list of mountpoints
-        defaultDir = config.plugins.mediaplayer2.defaultDir.getValue()
-        self.filelist = FileList(defaultDir, matchingPattern=r"(?i)^.*\.(mp2|mp3|ogg|ts|mts|m2ts|wav|wave|m3u|pls|e2pls|mpg|vob|avi|divx|m4v|mkv|mp4|m4a|dat|flac|flv|mov|dts|3gp|3g2|asf|wmv|wma|iso|webm)", useServiceRef=True, additionalExtensions="4098:m3u 4098:e2pls 4098:pls")
+        defaultDir = config.plugins.mediaplayer2.defaultDir.value
+        self.filelist = FileList(defaultDir or None, matchingPattern=r"(?i)^.*\.(mp2|mp3|ogg|ts|mts|m2ts|wav|wave|m3u|pls|e2pls|mpg|vob|avi|divx|m4v|mkv|mp4|m4a|dat|flac|flv|mov|dts|3gp|3g2|asf|wmv|wma|iso|webm)", useServiceRef=True, additionalExtensions="4098:m3u 4098:e2pls 4098:pls")
         self["filelist"] = self.filelist
 
         if config.plugins.mediaplayer2.useLibMedia.value:
-            self.libMedia = int(config.plugins.mediaplayer2.libMedia.value)
+            self.libMedia = config.plugins.mediaplayer2.libMedia.value
         else:
             self.libMedia = SERVICEMP3
 
@@ -389,8 +389,8 @@ class MediaPlayer(Screen, InfoBarBase, SubsSupportStatus, SubsSupport, InfoBarSe
                     self.playlistIOInternal.save(resolveFilename(SCOPE_CONFIG, "playlist.e2pls"))
                 except OSError:
                     print("couldn't save playlist.e2pls")
-            if config.plugins.mediaplayer2.saveDirOnExit.getValue():
-                config.plugins.mediaplayer2.defaultDir.setValue(self.filelist.getCurrentDirectory())
+            if config.plugins.mediaplayer2.saveDirOnExit.value:
+                config.plugins.mediaplayer2.defaultDir.value = self.filelist.getCurrentDirectory()
                 config.plugins.mediaplayer2.defaultDir.save()
             try:
                 from Plugins.SystemPlugins.Hotplug.plugin import hotplugNotifier
@@ -608,72 +608,42 @@ class MediaPlayer(Screen, InfoBarBase, SubsSupportStatus, SubsSupport, InfoBarSe
             text = ref.getPath()
             return text.split('/')[-1]
 
-    # FIXME: maybe this code can be optimized
-    def updateCurrentInfo(self):
-        text = ""
+    def updateCurrentInfo(self):  # Display current selected entry on LCD.
         if self.currList == "filelist":
-            idx = self.filelist.getSelectionIndex()
-            r = self.filelist.list[idx]
-            text = r[1][7]
-            if r[0][1] == True:
-                if len(text) < 2:
-                    text += " "
-                if text[:2] != "..":
-                    text = "/" + text
-            self.summaries.setText(text, 1)
-
-            idx += 1
-            if idx < len(self.filelist.list):
-                r = self.filelist.list[idx]
-                text = r[1][7]
-                if r[0][1] == True:
-                    text = "/" + text
-                self.summaries.setText(text, 3)
-            else:
-                self.summaries.setText(" ", 3)
-
-            idx += 1
-            if idx < len(self.filelist.list):
-                r = self.filelist.list[idx]
-                text = r[1][7]
-                if r[0][1] == True:
-                    text = "/" + text
-                self.summaries.setText(text, 4)
-            else:
-                self.summaries.setText(" ", 4)
-
-            text = ""
-            if not self.filelist.canDescent():
-                r = self.filelist.getServiceRef()
-                if r is None:
-                    return
-                text = r.getPath()
-                self["currenttext"].setText(os.path.basename(text))
-
+            count = self.filelist.count()
+            index = self.filelist.getCurrentIndex()
+            for offset, field in enumerate([1, 3, 4]):
+                if index + offset < count:
+                    entry = self.filelist.list[index + offset][0]
+                    text = entry[FILE_NAME]
+                    if entry[FILE_IS_DIR]:
+                        if len(text) < 2:
+                            text += " "
+                        if text[:2] != "..":
+                            text = "/" + text
+                    self.summaries.setText(text, field)
+                else:
+                    self.summaries.setText(" ", field)
+            if not self.filelist.canDescend():
+                serviceReference = self.filelist.getServiceRef()
+                if serviceReference:
+                    text = serviceReference.getPath()
+                    self["currenttext"].setText(os.path.basename(text))
         if self.currList == "playlist":
-            t = self.playlist.getSelection()
-            if t is None:
-                return
-            # display current selected entry on LCD
-            text = self.getIdentifier(t)
-            self.summaries.setText(text, 1)
-            self["currenttext"].setText(text)
-            idx = self.playlist.getSelectionIndex()
-            idx += 1
-            if idx < len(self.playlist):
-                currref = self.playlist.getServiceRefList()[idx]
-                text = self.getIdentifier(currref)
-                self.summaries.setText(text, 3)
-            else:
-                self.summaries.setText(" ", 3)
-
-            idx += 1
-            if idx < len(self.playlist):
-                currref = self.playlist.getServiceRefList()[idx]
-                text = self.getIdentifier(currref)
-                self.summaries.setText(text, 4)
-            else:
-                self.summaries.setText(" ", 4)
+            entry = self.playlist.getSelection()
+            if entry:
+                text = self.getIdentifier(entry)
+                self.summaries.setText(text, 1)
+                self["currenttext"].setText(text)
+                count = self.playlist.count()
+                index = self.playlist.getCurrentIndex() + 1
+                for offset, field in enumerate([3, 4]):
+                    if index + offset < count:
+                        entry = self.playlist.getServiceRefList()[index + offset]
+                        text = self.getIdentifier(entry)
+                        self.summaries.setText(text, field)
+                    else:
+                        self.summaries.setText(" ", field)
 
     def ok(self):
         if not self.shown:
@@ -834,13 +804,13 @@ class MediaPlayer(Screen, InfoBarBase, SubsSupportStatus, SubsSupport, InfoBarSe
             self.switchToPlayList()
 
     def applySettings(self):
-        self.savePlaylistOnExit = config.plugins.mediaplayer2.savePlaylistOnExit.getValue()
-        if config.plugins.mediaplayer2.repeat.getValue() == True:
+        self.savePlaylistOnExit = config.plugins.mediaplayer2.savePlaylistOnExit.value
+        if config.plugins.mediaplayer2.repeat.value:
             self["repeat"].setPixmapNum(1)
         else:
             self["repeat"].setPixmapNum(0)
-        if config.plugins.mediaplayer2.useLibMedia.getValue() == True:
-            self.libMedia = int(config.plugins.mediaplayer2.libMedia.getValue())
+        if config.plugins.mediaplayer2.useLibMedia.value:
+            self.libMedia = config.plugins.mediaplayer2.libMedia.value
         else:
             self.libMedia = SERVICEMP3
 
@@ -1043,7 +1013,7 @@ class MediaPlayer(Screen, InfoBarBase, SubsSupportStatus, SubsSupport, InfoBarSe
         next = self.playlist.getCurrentIndex() + 1
         if next < len(self.playlist):
             self.changeEntry(next)
-        elif (len(self.playlist) > 0) and (config.plugins.mediaplayer2.repeat.getValue() == True):
+        elif (len(self.playlist) > 0) and config.plugins.mediaplayer2.repeat.value:
             self.stopEntry()
             self.changeEntry(0)
         elif len(self.playlist) > 0:
@@ -1364,7 +1334,7 @@ def main(session, **kwargs):
 
 
 def menu(menuid, **kwargs):
-    if menuid == "mainmenu" and config.plugins.mediaplayer2.mainMenu.getValue():
+    if menuid == "mainmenu" and config.plugins.mediaplayer2.mainMenu.value:
         return [(_("Media player"), main, "media_player2", 44)]
     return []
 

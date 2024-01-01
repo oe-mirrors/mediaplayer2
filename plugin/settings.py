@@ -73,15 +73,15 @@ config.plugins.mediaplayer2.serviceGstPlayer.bufferSize = ConfigInteger(8192, (1
 config.plugins.mediaplayer2.serviceGstPlayer.bufferDuration = ConfigInteger(0, (0, 100))
 
 if libMediaTest:
-    if config.plugins.mediaplayer2.useLibMedia.getValue() == False:
+    if not config.plugins.mediaplayer2.useLibMedia.value:
         config.plugins.mediaplayer2.useLibMedia.value = True
         config.plugins.mediaplayer2.useLibMedia.save()
 else:
-    if config.plugins.mediaplayer2.useLibMedia.getValue() == True:
+    if config.plugins.mediaplayer2.useLibMedia.value:
         config.plugins.mediaplayer2.useLibMedia.value = False
         config.plugins.mediaplayer2.useLibMedia.save()
 
-config.plugins.mediaplayer2.libMedia = ConfigSelection(default=str(SERVICEMP3), choices=[(str(k), v) for k, v in LIBMEDIA_CHOICES.items()])
+config.plugins.mediaplayer2.libMedia = ConfigSelection(default=SERVICEMP3, choices=[(k, v) for k, v in LIBMEDIA_CHOICES.items()])
 config.plugins.mediaplayer2.lcdOnVideoPlayback = ConfigSelection(default='default', choices=[
         ('default', _("Default")),
         ('remaining', _("shows remaining time")),
@@ -195,7 +195,7 @@ class MediaPlayerSettings(Screen, ConfigListScreen):
             self.list.append(getConfigListEntry(_("repeat playlist"), config.plugins.mediaplayer2.repeat))
             self.list.append(getConfigListEntry(_("save playlist on exit"), config.plugins.mediaplayer2.savePlaylistOnExit))
             self.list.append(getConfigListEntry(_("save last directory on exit"), config.plugins.mediaplayer2.saveDirOnExit))
-            if not config.plugins.mediaplayer2.saveDirOnExit.getValue():
+            if not config.plugins.mediaplayer2.saveDirOnExit.value:
                 self.list.append(getConfigListEntry(_("start directory"), config.plugins.mediaplayer2.defaultDir))
             self.list.append(getConfigListEntry(_("sorting of playlists"), config.plugins.mediaplayer2.sortPlaylists))
             self.list.append(getConfigListEntry(_("always hide infobar"), config.plugins.mediaplayer2.alwaysHideInfoBar))
@@ -211,9 +211,9 @@ class MediaPlayerSettings(Screen, ConfigListScreen):
             self.list.append(getConfigListEntry(_("LCD on video playback"), config.plugins.mediaplayer2.lcdOnVideoPlayback))
             self.list.append(getConfigListEntry(_("show in extensions menu"), config.plugins.mediaplayer2.extensionsMenu))
             self.list.append(getConfigListEntry(_("show in main menu"), config.plugins.mediaplayer2.mainMenu))
-            if config.plugins.mediaplayer2.useLibMedia.getValue() == True:
+            if config.plugins.mediaplayer2.useLibMedia.value:
                 self.list.append(getConfigListEntry(_("media framework"), config.plugins.mediaplayer2.libMedia))
-                if int(config.plugins.mediaplayer2.libMedia.value) == SERVICE_GSTPLAYER:
+                if config.plugins.mediaplayer2.libMedia.value == SERVICE_GSTPLAYER:
                     self.list.append(getConfigListEntry(_("sink"), config.plugins.mediaplayer2.serviceGstPlayer.sink))
                     self.list.append(getConfigListEntry(_("subtitles"), config.plugins.mediaplayer2.serviceGstPlayer.subtitles))
             self["config"].setList(self.list)
@@ -250,8 +250,8 @@ class MediaPlayerSettings(Screen, ConfigListScreen):
 
     def DirectoryBrowserClosed(self, path):
         print("PathBrowserClosed:" + str(path))
-        if path != False:
-            config.plugins.mediaplayer2.defaultDir.setValue(path)
+        if path:
+            config.plugins.mediaplayer2.defaultDir.value = path
 
     def save(self):
         for x in self["config"].list:

@@ -18,12 +18,6 @@
 		<key id="KEY_RIGHT" mapto="right" flags="m" />
 	</map>
 
-	<map context="SubtitlesActions">
-		<key id="KEY_SUBTITLE" mapto="subtitles" flags="m" />
-		<key id="KEY_TEXT" mapto="subtitles" flags="m" />
-		<key id="KEY_RADIO" mapto="subtitles" flags="m" />
-	</map>
-
 	<map context="InfobarAspectChangeActions">
 		<key id="KEY_ZOOM" mapto="aspectChange" flags="m" />
 		<key id="KEY_5" mapto="aspectChange" flags="m" />
