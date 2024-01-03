@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MediaPlayer2\n"
-"POT-Creation-Date: 2024-01-03 08:52+0100\n"
-"PO-Revision-Date: 2024-01-03 09:05+0100\n"
+"POT-Creation-Date: 2024-01-03 11:03+0100\n"
+"PO-Revision-Date: 2024-01-03 11:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: oe-a\n"
 "Language: de\n"
@@ -27,12 +27,11 @@ msgid "Toggle a cut mark at the current position"
 msgstr "Marker an der aktuellen Position setzen"
 
 #: plugin/e2util.py:97
-#, fuzzy
 msgid "Do you want to resume this playback?"
 msgstr "Soll diese Wiedergabe fortgesetzt werden?"
 
 #: plugin/e2util.py:97
-#, fuzzy, python-format
+#, python-format
 msgid "Resume position at %s"
 msgstr "Wiederaufnahmeposition bei %s"
 
@@ -44,7 +43,6 @@ msgstr "Wiederaufnahmeposition bei %s"
 #. TRANSLATORS: (Some translators seem to have interpreted it as a
 #. TRANSLATORS: question or a choice, but it is a statement.)
 #: plugin/e2util.py:106
-#, fuzzy
 msgid "Resuming playback"
 msgstr "Fortsetzen der Wiedergabe"
 
@@ -65,7 +63,6 @@ msgid "Just scale"
 msgstr "Nur skalieren"
 
 #: plugin/e2util.py:477
-#, fuzzy
 msgid "PillarBox"
 msgstr "Pillarbox"
 
@@ -110,7 +107,6 @@ msgid "Exit mediaplayer"
 msgstr "Mediaplayer beenden"
 
 #: plugin/plugin.py:214
-#, fuzzy
 msgid "show info"
 msgstr "Zeige Infos"
 
@@ -119,7 +115,6 @@ msgid "Play entry"
 msgstr "Eintrag abspielen"
 
 #: plugin/plugin.py:216
-#, fuzzy
 msgid "Pause"
 msgstr "Pause"
 
@@ -172,7 +167,6 @@ msgid "Show external subtitles status"
 msgstr "Status externer Untertitel anzeigen"
 
 #: plugin/plugin.py:233
-#, fuzzy
 msgid "show event details"
 msgstr "Sendungsdetails anzeigen"
 
@@ -263,7 +257,6 @@ msgid "Do you really want to delete %s?"
 msgstr "%s wirklich löschen?"
 
 #: plugin/plugin.py:911 plugin/plugin.py:970
-#, fuzzy
 msgid "Delete failed!"
 msgstr "Löschen fehlgeschlagen!"
 
@@ -272,7 +265,6 @@ msgid "You cannot delete this!"
 msgstr "Löschen nicht möglich!"
 
 #: plugin/plugin.py:1338
-#, fuzzy
 msgid "Media player"
 msgstr "Mediaplayer"
 
@@ -285,7 +277,6 @@ msgid "View video CD..."
 msgstr "Video-CD wiedergeben..."
 
 #: plugin/plugin.py:1412
-#, fuzzy
 msgid "Play music..."
 msgstr "Musik abspielen..."
 
@@ -294,7 +285,6 @@ msgid "Play back media files with subtitles"
 msgstr "Wiedergabe von Mediendateien mit Untertiteln"
 
 #: plugin/settings.py:31 plugin/settings.py:32
-#, fuzzy
 msgid "Ask user"
 msgstr "Anwender fragen"
 
@@ -311,17 +301,14 @@ msgid "no"
 msgstr "nein"
 
 #: plugin/settings.py:33
-#, fuzzy
 msgid "Resume from last position"
 msgstr "Von letzter Position fortsetzen"
 
 #: plugin/settings.py:34
-#, fuzzy
 msgid "Start from the beginning"
 msgstr "Starte vom Anfang"
 
 #: plugin/settings.py:40
-#, fuzzy
 msgid "Gstreamer"
 msgstr "GStreamer:\t\t%s"
 
@@ -358,7 +345,6 @@ msgid "Expert"
 msgstr "Experte"
 
 #: plugin/settings.py:123 plugin/settings.py:166
-#, fuzzy
 msgid "Cancel"
 msgstr "Beenden"
 
@@ -375,7 +361,6 @@ msgid "Save"
 msgstr "Speichern"
 
 #: plugin/settings.py:194
-#, fuzzy
 msgid "context menu"
 msgstr "Öffne Kontext-Menü"
 
@@ -400,7 +385,6 @@ msgid "sorting of playlists"
 msgstr "Sortierung der Wiedergabelisten"
 
 #: plugin/settings.py:201
-#, fuzzy
 msgid "always hide infobar"
 msgstr "Infoleiste immer ausblenden"
 
@@ -437,7 +421,6 @@ msgid "show in extensions menu"
 msgstr "im Erweiterungsmenü anzeigen"
 
 #: plugin/settings.py:213
-#, fuzzy
 msgid "show in main menu"
 msgstr "Zeige das DVD Hauptmenü"
 
@@ -450,7 +433,6 @@ msgid "sink"
 msgstr "sink"
 
 #: plugin/settings.py:218
-#, fuzzy
 msgid "subtitles"
 msgstr "Untertitel"
 
