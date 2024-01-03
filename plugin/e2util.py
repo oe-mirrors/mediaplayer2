@@ -337,7 +337,7 @@ class MyInfoBarCueSheetSupport(InfoBarCueSheetSupport):
 
     def updateGaugeRenderers(self):
         for r in self.__gaugeRenderers:
-            r.setCutlist(map(lambda x: (int(x[0]), int(x[1])), (cut for cut in self.cut_list)))
+            r.setCutlist([(int(x[0]), int(x[1])) for x in (cut for cut in self.cut_list)])
 
     def downloadCuesheet(self):
         if self.cueSheetForServicemp3:
