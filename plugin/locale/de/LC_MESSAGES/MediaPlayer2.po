@@ -1,0 +1,459 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MediaPlayer2\n"
+"POT-Creation-Date: 2024-01-03 08:52+0100\n"
+"PO-Revision-Date: 2024-01-03 09:05+0100\n"
+"Last-Translator: \n"
+"Language-Team: oe-a\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-Basepath: ../../../..\n"
+"X-Poedit-SearchPath-0: plugin\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: plugin/e2util.py:42
+msgid "Jump to previous marked position"
+msgstr "Springe zur vorherigen Markerposition"
+
+#: plugin/e2util.py:43
+msgid "Jump to next marked position"
+msgstr "Springe zur nächsten Markerposition"
+
+#: plugin/e2util.py:44
+msgid "Toggle a cut mark at the current position"
+msgstr "Marker an der aktuellen Position setzen"
+
+#: plugin/e2util.py:97
+#, fuzzy
+msgid "Do you want to resume this playback?"
+msgstr "Soll diese Wiedergabe fortgesetzt werden?"
+
+#: plugin/e2util.py:97
+#, fuzzy, python-format
+msgid "Resume position at %s"
+msgstr "Wiederaufnahmeposition bei %s"
+
+#. TRANSLATORS: The string "Resuming playback" flashes for a moment
+#. TRANSLATORS: at the start of a movie, when the user has selected
+#. TRANSLATORS: "Resume from last position" as start behavior.
+#. TRANSLATORS: The purpose is to notify the user that the movie starts
+#. TRANSLATORS: in the middle somewhere and not from the beginning.
+#. TRANSLATORS: (Some translators seem to have interpreted it as a
+#. TRANSLATORS: question or a choice, but it is a statement.)
+#: plugin/e2util.py:106
+#, fuzzy
+msgid "Resuming playback"
+msgstr "Fortsetzen der Wiedergabe"
+
+#: plugin/e2util.py:473 plugin/e2util.py:481
+msgid "Letterbox"
+msgstr "Letterbox"
+
+#: plugin/e2util.py:474 plugin/e2util.py:478 plugin/e2util.py:482
+msgid "Pan&scan"
+msgstr "Pan & Scan"
+
+#: plugin/e2util.py:475 plugin/e2util.py:479
+msgid "Nonlinear"
+msgstr "Nicht linear"
+
+#: plugin/e2util.py:476 plugin/e2util.py:480 plugin/e2util.py:483
+msgid "Just scale"
+msgstr "Nur skalieren"
+
+#: plugin/e2util.py:477
+#, fuzzy
+msgid "PillarBox"
+msgstr "Pillarbox"
+
+#: plugin/e2util.py:507
+msgid "change aspect ratio"
+msgstr "Seitenverhältnisse anpassen"
+
+#: plugin/e2util.py:516
+msgid "Aspect"
+msgstr "Seitenverhältnisse"
+
+#: plugin/e2util.py:516
+msgid "Policy"
+msgstr "Richtlinie"
+
+#: plugin/plugin.py:176
+msgid "Artist"
+msgstr "Künstler"
+
+#: plugin/plugin.py:178
+msgid "Title"
+msgstr "Titel"
+
+#: plugin/plugin.py:180
+msgid "Album"
+msgstr "Album"
+
+#: plugin/plugin.py:182
+msgid "Year"
+msgstr "Jahr"
+
+#: plugin/plugin.py:184
+msgid "Genre"
+msgstr "Genre"
+
+#: plugin/plugin.py:208
+msgid "Add file to playlist"
+msgstr "Datei zur Wiedergabeliste hinzufügen"
+
+#: plugin/plugin.py:209
+msgid "Exit mediaplayer"
+msgstr "Mediaplayer beenden"
+
+#: plugin/plugin.py:214
+#, fuzzy
+msgid "show info"
+msgstr "Zeige Infos"
+
+#: plugin/plugin.py:215
+msgid "Play entry"
+msgstr "Eintrag abspielen"
+
+#: plugin/plugin.py:216
+#, fuzzy
+msgid "Pause"
+msgstr "Pause"
+
+#: plugin/plugin.py:217
+msgid "Stop entry"
+msgstr "Wiedergabe anhalten"
+
+#: plugin/plugin.py:218
+msgid "Play from previous mark or playlist entry"
+msgstr "Wiedergabe ab der letzten Markierung/Listeneintrag"
+
+#: plugin/plugin.py:219
+msgid "Play from next mark or playlist entry"
+msgstr "Wiedergabe ab der nächsten Markierung/Listeneintrag"
+
+#: plugin/plugin.py:220
+msgid "Menu"
+msgstr "Menü"
+
+#: plugin/plugin.py:221
+msgid "Jump to beginning of list"
+msgstr "Zum Anfang der Liste springen"
+
+#: plugin/plugin.py:222
+msgid "Jump to end of list"
+msgstr "Zum Ende der Liste springen"
+
+#: plugin/plugin.py:223 plugin/plugin.py:694
+msgid "Switch to playlist"
+msgstr "Zur Playlist wechseln"
+
+#: plugin/plugin.py:224 plugin/plugin.py:714
+msgid "Switch to filelist"
+msgstr "Zur Dateiliste wechseln"
+
+#: plugin/plugin.py:225
+msgid "Delete playlist entry"
+msgstr "Wiedergabelisteneintrag löschen"
+
+#: plugin/plugin.py:226 plugin/plugin.py:715
+msgid "Clear playlist"
+msgstr "Playlist leeren"
+
+#: plugin/plugin.py:227 plugin/plugin.py:718
+msgid "Shuffle playlist"
+msgstr "Playlist neu mischen"
+
+#: plugin/plugin.py:228
+msgid "Show external subtitles status"
+msgstr "Status externer Untertitel anzeigen"
+
+#: plugin/plugin.py:233
+#, fuzzy
+msgid "show event details"
+msgstr "Sendungsdetails anzeigen"
+
+#: plugin/plugin.py:338 plugin/plugin.py:350
+msgid "No external subtitles loaded"
+msgstr "Es wurden keine externen Untertitel geladen"
+
+#: plugin/plugin.py:376 plugin/plugin.py:378
+msgid "Exit media player?"
+msgstr "Mediaplayer verlassen?"
+
+#: plugin/plugin.py:430 plugin/plugin.py:436
+#, python-format
+msgid "This receiver cannot decode %s streams!"
+msgstr "Dieser Empfänger kann %s Streams nicht dekodieren!"
+
+#: plugin/plugin.py:684 plugin/plugin.py:1420
+msgid "Play audio-CD..."
+msgstr "Audio-CD wiedergeben..."
+
+#: plugin/plugin.py:687
+msgid "Add directory to playlist"
+msgstr "Verzeichnis zur Playlist hinzufügen"
+
+#: plugin/plugin.py:689
+msgid "Add directory to playlist and play"
+msgstr "Verzeichnis zur Wiedergabeliste hinzufügen"
+
+#: plugin/plugin.py:691
+msgid "Add files to playlist"
+msgstr "Zur Playliste hinzufügen"
+
+#: plugin/plugin.py:693
+msgid "Add files to playlist and play"
+msgstr "Dateien zur Wiedergabeliste hinzufügen"
+
+#: plugin/plugin.py:696
+msgid "Delete file"
+msgstr "Datei löschen"
+
+#: plugin/plugin.py:710 plugin/plugin.py:713
+msgid "Play with"
+msgstr "Spielen mit"
+
+#: plugin/plugin.py:716
+msgid "Delete entry"
+msgstr "Eintrag löschen"
+
+#: plugin/plugin.py:719
+msgid "Show in filelist"
+msgstr "In Dateiliste anzeigen"
+
+#: plugin/plugin.py:720
+msgid "Hide player"
+msgstr "Player verbergen"
+
+#: plugin/plugin.py:721
+msgid "Load playlist"
+msgstr "Playlist laden"
+
+#: plugin/plugin.py:723 plugin/plugin.py:850
+msgid "Save playlist"
+msgstr "Playlist speichern"
+
+#: plugin/plugin.py:724
+msgid "Delete saved playlist"
+msgstr "Gespeicherte Playlist löschen"
+
+#: plugin/plugin.py:725 plugin/settings.py:163
+msgid "Edit settings"
+msgstr "Einstellungen bearbeiten"
+
+#: plugin/plugin.py:850
+msgid "Please enter filename (empty = use current date)"
+msgstr "Dateinamen eingeben (leer = Dateiname ist aktuelles Datum)"
+
+#: plugin/plugin.py:874
+msgid "Please select a playlist..."
+msgstr "Wiedergabeliste wählen..."
+
+#: plugin/plugin.py:898
+msgid "Please select a playlist to delete..."
+msgstr "Wiedergabeliste zum Löschen auswählen..."
+
+#: plugin/plugin.py:903 plugin/plugin.py:956
+#, python-format
+msgid "Do you really want to delete %s?"
+msgstr "%s wirklich löschen?"
+
+#: plugin/plugin.py:911 plugin/plugin.py:970
+#, fuzzy
+msgid "Delete failed!"
+msgstr "Löschen fehlgeschlagen!"
+
+#: plugin/plugin.py:958
+msgid "You cannot delete this!"
+msgstr "Löschen nicht möglich!"
+
+#: plugin/plugin.py:1338
+#, fuzzy
+msgid "Media player"
+msgstr "Mediaplayer"
+
+#: plugin/plugin.py:1395
+msgid "Watch movies..."
+msgstr "Filme ansehen"
+
+#: plugin/plugin.py:1404
+msgid "View video CD..."
+msgstr "Video-CD wiedergeben..."
+
+#: plugin/plugin.py:1412
+#, fuzzy
+msgid "Play music..."
+msgstr "Musik abspielen..."
+
+#: plugin/plugin.py:1428
+msgid "Play back media files with subtitles"
+msgstr "Wiedergabe von Mediendateien mit Untertiteln"
+
+#: plugin/settings.py:31 plugin/settings.py:32
+#, fuzzy
+msgid "Ask user"
+msgstr "Anwender fragen"
+
+#: plugin/settings.py:31 plugin/settings.py:32
+msgid "default"
+msgstr "Standard"
+
+#: plugin/settings.py:31
+msgid "yes"
+msgstr "Ja"
+
+#: plugin/settings.py:32
+msgid "no"
+msgstr "nein"
+
+#: plugin/settings.py:33
+#, fuzzy
+msgid "Resume from last position"
+msgstr "Von letzter Position fortsetzen"
+
+#: plugin/settings.py:34
+#, fuzzy
+msgid "Start from the beginning"
+msgstr "Starte vom Anfang"
+
+#: plugin/settings.py:40
+#, fuzzy
+msgid "Gstreamer"
+msgstr "GStreamer:\t\t%s"
+
+#: plugin/settings.py:56
+msgid "Gstreamer(App)"
+msgstr "Gstreamer(App)"
+
+#: plugin/settings.py:59
+msgid "ExtEplayer3(App)"
+msgstr "ExtEplayer3(App)"
+
+#: plugin/settings.py:86
+msgid "Default"
+msgstr "Standard"
+
+#: plugin/settings.py:87
+msgid "shows remaining time"
+msgstr "zeigt die verbleibende Zeit"
+
+#: plugin/settings.py:88
+msgid "shows current position"
+msgstr "zeigt die aktuelle Position"
+
+#: plugin/settings.py:90
+msgid "Simple"
+msgstr "Einfach"
+
+#: plugin/settings.py:91
+msgid "Intermediate"
+msgstr "Fortgeschritten"
+
+#: plugin/settings.py:92
+msgid "Expert"
+msgstr "Experte"
+
+#: plugin/settings.py:123 plugin/settings.py:166
+#, fuzzy
+msgid "Cancel"
+msgstr "Beenden"
+
+#: plugin/settings.py:124
+msgid "Use"
+msgstr "Benutzen"
+
+#: plugin/settings.py:139
+msgid "Directory browser"
+msgstr "Datei-Manager"
+
+#: plugin/settings.py:167
+msgid "Save"
+msgstr "Speichern"
+
+#: plugin/settings.py:194
+#, fuzzy
+msgid "context menu"
+msgstr "Öffne Kontext-Menü"
+
+#: plugin/settings.py:195
+msgid "repeat playlist"
+msgstr "Wiederholung der Wiedergabeliste"
+
+#: plugin/settings.py:196
+msgid "save playlist on exit"
+msgstr "Wiedergabeliste beim Beenden speichern"
+
+#: plugin/settings.py:197
+msgid "save last directory on exit"
+msgstr "Anfangsverzeichnis beim Beenden merken"
+
+#: plugin/settings.py:199
+msgid "start directory"
+msgstr "Anfangsverzeichnis auswählen mit OK"
+
+#: plugin/settings.py:200
+msgid "sorting of playlists"
+msgstr "Sortierung der Wiedergabelisten"
+
+#: plugin/settings.py:201
+#, fuzzy
+msgid "always hide infobar"
+msgstr "Infoleiste immer ausblenden"
+
+#: plugin/settings.py:202
+msgid "hide infobar and close"
+msgstr "Infoleiste ausblenden und schließen"
+
+#: plugin/settings.py:204
+msgid "sqlite3 library is missing!, cuesheets for servicemp3 disabled"
+msgstr "sqlite3-Bibliothek fehlt, Cuesheets für servicemp3 deaktiviert"
+
+#: plugin/settings.py:206
+msgid "cuesheets for servicemp3 (restart plugin)"
+msgstr "Hinweise für servicemp3 (Neustart-Plugin)"
+
+#: plugin/settings.py:208
+msgid "remove all saved positions"
+msgstr "alle gespeicherten Positionen löschen"
+
+#: plugin/settings.py:209
+msgid "save last position (restart plugin)"
+msgstr "letzte Position speichern (Plugin neu starten)"
+
+#: plugin/settings.py:210
+msgid "on movie start (restart plugin)"
+msgstr "bei Filmstart (Plugin neu starten)"
+
+#: plugin/settings.py:211
+msgid "LCD on video playback"
+msgstr "LCD-Anzeige bei Videowiedergabe"
+
+#: plugin/settings.py:212
+msgid "show in extensions menu"
+msgstr "im Erweiterungsmenü anzeigen"
+
+#: plugin/settings.py:213
+#, fuzzy
+msgid "show in main menu"
+msgstr "Zeige das DVD Hauptmenü"
+
+#: plugin/settings.py:215
+msgid "media framework"
+msgstr "media framework"
+
+#: plugin/settings.py:217
+msgid "sink"
+msgstr "sink"
+
+#: plugin/settings.py:218
+#, fuzzy
+msgid "subtitles"
+msgstr "Untertitel"
+
+#: plugin/settings.py:240
+msgid "Do you really want to delete all saved positions?"
+msgstr "Wollen Sie wirklich alle gespeicherten Positionen löschen?"

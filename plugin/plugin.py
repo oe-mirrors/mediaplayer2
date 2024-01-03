@@ -1427,7 +1427,7 @@ def Plugins(**kwargs):
     name = 'MediaPlayer2'
     description = _('Play back media files with subtitles')
     pluginList = []
-    pluginList.append(PluginDescriptor(name, PluginDescriptor.WHERE_PLUGINMENU, description, fnc=main))
+    pluginList.append(PluginDescriptor(name, PluginDescriptor.WHERE_PLUGINMENU, description, icon="MediaPlayer.png", fnc=main))
     if config.plugins.mediaplayer2.extensionsMenu.value:
         pluginList.append(PluginDescriptor(name, PluginDescriptor.WHERE_EXTENSIONSMENU, description, fnc=main))
     if config.plugins.mediaplayer2.mainMenu.value:
