@@ -3,7 +3,7 @@ import setup_translate
 
 pkg = 'Extensions.MediaPlayer2'
 setup (name = 'enigma2-plugin-extensions-mediaplayer2',
-       version = '0.7',
+       version = '0.8',
        description = 'MediaPlayer2',
        long_description = 'mediaplayer plugin with added support for subssupport plugin for enhanced subtitles support.',
        author='mx3L and OE-A',
