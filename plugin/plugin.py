@@ -323,6 +323,9 @@ class MediaPlayer(Screen, InfoBarBase, SubsSupportStatus, SubsSupport, InfoBarSe
     def audioSelection(self):
         self.session.openWithCallback(self.audioSelected, MyAudioSelection, infobar=self)
 
+    def audioSelected(self, ret=None):
+        print("[InfoBarGenerics] [infobar::audioSelected]", ret)
+
     def hideAndInfoBar(self):
         self.hide()
         self.mediaPlayerInfoBar.show()
